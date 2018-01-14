@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Bezier</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/89/three.min.js"></script>
 	<script src="OrbitControls.js"></script>
@@ -11,7 +12,113 @@
 </head>
 <body>
 <div>
+	<h1>Curve</h1>
+	<div class="left">
+		<div>
+		<h2>線形補間</h2>
+\(
+\boldsymbol{P^1}(\boldsymbol{P_{S}},\boldsymbol{P_{E}})\equiv(1-u)\boldsymbol{P_{S}}+u\boldsymbol{P_{E}}\\
+\ =\begin{pmatrix}1-u & u \end{pmatrix}
+\begin{pmatrix}\boldsymbol{P_{S}} \\ \boldsymbol{P_{E}}\end{pmatrix}
+\)
+		</div>
+		<div>
+		<h2>2次ベジェ曲線</h2>
+\(
+\boldsymbol{P^2}(\boldsymbol{P_{S}},\boldsymbol{P_{1}},\boldsymbol{P_{E}})
+\equiv(1-u)\boldsymbol{P^1}(\boldsymbol{P_{S}},\boldsymbol{P_{1}})+u\boldsymbol{P^1}(\boldsymbol{P_{1}},\boldsymbol{P_{E}})\\
+\ =\begin{pmatrix}(1-u)^2 & 2u(1-u) & u^2 \end{pmatrix}
+\begin{pmatrix}\boldsymbol{P_{S}} \\ \boldsymbol{P_{1}} \\ \boldsymbol{P_{E}}\end{pmatrix}
+\)
+		</div>
+		<div>
+		<h2>3次ベジェ曲線</h2>
+\(
+\boldsymbol{P^3}(\boldsymbol{P_{S}},\boldsymbol{P_{1}},\boldsymbol{P_{2}},\boldsymbol{P_{E}})
+\equiv(1-u)\boldsymbol{P^2}(\boldsymbol{P_{S}},\boldsymbol{P_{1}},\boldsymbol{P_{2}})
++u\boldsymbol{P^2}(\boldsymbol{P_{1}},\boldsymbol{P_{2}},\boldsymbol{P_{E}})\\
+\ =\begin{pmatrix}(1-u)^3 & 3u(1-u)^2 & 3u^2(1-u) & u^3 \end{pmatrix}
+\begin{pmatrix}\boldsymbol{P_{S}} \\ \boldsymbol{P_{1}}\\ \boldsymbol{P_{2}}\\ \boldsymbol{P_{E}}
+\end{pmatrix}
+\)
+		</div>
+		<div>
+		<h2>n次ベジェ曲線(一般化)</h2>
+\(
+\boldsymbol{P^n}(\boldsymbol{P_{S}},\boldsymbol{P_{1}} \ldots \boldsymbol{P_{n-1}},\boldsymbol{P_{E}})
+\equiv(1-u)\boldsymbol{P^{n-1}}(\boldsymbol{P_{S}},\boldsymbol{P_{1}} \ldots \boldsymbol{P_{n-1}})
++u\boldsymbol{P^{n-1}}(\boldsymbol{P_{1}}\ldots \boldsymbol{P_{n-1}},\boldsymbol{P_{E}})\\
+\ =\begin{pmatrix}B^n_0(u) & \ldots & B^n_n(u)\end{pmatrix}
+\begin{pmatrix} \boldsymbol{P_{S}}\\\boldsymbol{P_{1}}\\ \vdots \\ \boldsymbol{P_{n-1}}\\\boldsymbol{P_{E}} \end{pmatrix}\\
+B^n_i(u)= {n \choose i}u^i(1-u)^{n-i}
+\)		</div>
+	</div>
+	<div class="right">
+		<canvas id="c1" width="400" height="400"></canvas>
+		<div>
+			<button id="c1Stop">stop</button><input type="range" max="1" step="0.01" value="0" />
+		</div>
+		<table id="curve"><thead></thead><tbody>
+		<tr><th>S</th><td><input class="pos x" value="1" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td></tr>
+		<tr><th>1<input type="checkbox" class="2o"></th><td><input class="pos x" value="1" /><input class="pos y" value="0.5528" /><input class="pos z" value="0" /></td></tr>
+		<tr><th>2<input type="checkbox" class="3o"></th><td><input class="pos x" value="0.5528" /><input class="pos y" value="1" /><input class="pos z" value="0" /></td></tr>
+		<tr><th>E</th><td><input class="pos x" value="0" /><input class="pos y" value="1" /><input class="pos z" value="0" /></td></tr>
+		</tbody></table>
+	</div>
+	<script src="c1.js"></script>
+	<div class="fend"></div>
 </div>
-
+<div>
+	<h1>Surface</h1>
+	<div class="left">
+		<div>
+		<h2>双一次補間</h2>
+\(
+\boldsymbol{P^1}(\boldsymbol{P_{SS}},\boldsymbol{P_{SE}})=(1-u)\boldsymbol{P_{SS}}+u\boldsymbol{P_{SE}}\\
+\boldsymbol{P^1}(\boldsymbol{P_{ES}},\boldsymbol{P_{EE}})=(1-u)\boldsymbol{P_{ES}}+u\boldsymbol{P_{EE}}\\
+\boldsymbol{P^{11}}(\boldsymbol{P_{SS}},\boldsymbol{P_{SE}},\boldsymbol{P_{ES}},\boldsymbol{P_{EE}})\equiv
+(1-v)\boldsymbol{P^1}(\boldsymbol{P_{SS}},\boldsymbol{P_{SE}})+v\boldsymbol{P^1}(\boldsymbol{P_{ES}},\boldsymbol{P_{EE}})\\
+\ =(1-u)(1-v)\boldsymbol{P_{SS}}+u(1-v)\boldsymbol{P_{SE}}+(1-u)v\boldsymbol{P_{ES}}+uv\boldsymbol{P_{EE}}\\
+\ =\begin{pmatrix}1-u & u \end{pmatrix}
+\begin{pmatrix}\boldsymbol{P_{SS}} & \boldsymbol{P_{ES}}\\ \boldsymbol{P_{SE}} & \boldsymbol{P_{EE}} \end{pmatrix}
+\begin{pmatrix}1-v \\ v \end{pmatrix}
+\)	
+		</div>
+		<div>
+		<h2>n×m次ベジェ曲面</h2>
+\(
+\boldsymbol{P^{nm}}(\boldsymbol{P_{SS}}\ldots\boldsymbol{P_{ij}} \ldots \boldsymbol{P_{EE}})\\
+\equiv
+\begin{pmatrix}B^n_0(u) & \ldots & B^n_n(u)\end{pmatrix}
+\begin{pmatrix} 
+\boldsymbol{P_{SS}} & \ldots & \boldsymbol{P_{ES}}\\
+\vdots & \ddots & \vdots \\ 
+\boldsymbol{P_{SE}} & \ldots & \boldsymbol{P_{EE}}  \end{pmatrix}
+\begin{pmatrix}B^m_0(v) \\ \vdots \\ B^m_m(v)\end{pmatrix}
+\)	
+		</div>
+	</div>
+	<div class="right">
+		<canvas id="f1" width="400" height="400"></canvas>
+		<div>
+		<div width="200px">
+			<div class="left"><button id="f1Stop" class="stop" style="vertical-align:top;">stop</button></div>
+			<div style="display:inline-block;"><div><input type="range" max="1" step="0.01" value="0" /></div><div><input type="range" max="1" step="0.01" value="0" /></div>
+			</div>
+		</div>
+		<table id="surface">
+		<thead>
+		<tr><th></th><th>S</th><th>1<input type="checkbox" class="y2o" /></th><th>2<input type="checkbox" class="y3o" /></th><th>E</th></tr>
+		</thead>
+		<tbody>
+		<tr><th>S</th><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="1" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="1" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0"/><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="1"/></td></tr>
+		<tr><th>1<input type="checkbox" class="x2o" /></th><td><input class="pos x" value="1" /><input class="pos y" value="0" /><input class="pos z" value="1" /></td><td><input class="pos x" value="1" /><input class="pos y" value="1" /><input class="pos z" value="1" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="1" /><input class="pos z" value="1" /></td></tr>
+		<tr><th>2<input type="checkbox" class="x3o" /></th><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td></tr>
+		<tr><th>E</th><td><input class="pos x" value="1" /><input class="pos y" value="0" /><input class="pos z" value="0" /><td><input class="pos x" value="1" /><input class="pos y" value="1" /><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="0" /><input class="pos z" value="0" /></td><td><input class="pos x" value="0" /><input class="pos y" value="1" /><input class="pos z" value="0" /></td></tr>
+		</tbody></table>
+	</div>
+	<script src="f1.js"></script>
+	<div class="fend"></div>
+</div>
 </body>
 </html>
