@@ -1,0 +1,17 @@
+body{margin:0;padding:0;border:0;}
+h1,h2,h3,h4{margin:0;}
+.right{float:right;display:inline-block;}
+.left{display:inline-block;}
+.fend{clear:right;}
+input[type=range]{
+    width: 100px;
+    height: 6px;
+}
+table{
+	border-collapse:collapse;
+	text-align:center;
+}
+table td,table th{
+	border:solid 1px gray;	
+}
+.pos{width:3em;}
